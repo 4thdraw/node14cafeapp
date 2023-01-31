@@ -3,7 +3,8 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-const notice = require('./api/notice')
+const notice = require('./api/notice');
+
 
 
 app.use(express.static( path.join(__dirname, 'public')))
@@ -13,6 +14,10 @@ app.use('/notice', notice);
 
 app.get('/',function(req, res){
     res.sendFile( path.join(__dirname, 'public/index.html'))
+})
+//라우터없다면
+app.use((req, res) =>{
+    res.status(404).sendFile( path.join(__dirname, 'public/nopage.html'))
 })
 
 app.listen(PORT, () => {
