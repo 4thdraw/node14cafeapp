@@ -45,14 +45,31 @@ router.get('/',(req, res) => {
                     format  // sql언어이고 들어쓰기 하기
     ); // xml에서 가져와서 쿼리문 생성
 
-      conn.query(noticeQuery, (error, results) => {
+    conn.getConnection( ( err, connection ) => {
+      if(err) throw console.log(" 이 에러가 보인다면 dB정보 틀린거임  : " + err);
+
+      connection.query(noticeQuery, (error, result) => {
         //DB sql퀴리실행
-        if(error){
-          res.send(error)
-        }
-        res.send('쿼리실행 성공!')
+        if(error) throw "여기 에러는 sql문 오류"+ error + result; // result를 받지 못하는 상황
+
+        if(params.crud === 'select'){ 
+          //목록보기 제외하고 나머지는 처리결과만 보내주면 되기때문에 그 외 나머지가 됨 
+          
+          res.send(result); // react한테 res.data를 주라.
+          // sql 전송결과 보냄
+          console.log('타입 : ' , typeof result , ' 전송데이터 : ', result)
+
+      }else{
+          console.log("crud : select외 실행", params.crud)
+          res.send("succ"); // react한테 succ라는 문자를 주라.
+      }
 
       })
+      connection.release(); // 위의 연결 끝내기 그래야 다음 서버 접속자 대기에서 사용으로
+
+    })
+
+   
    
 
 })
