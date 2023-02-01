@@ -4,7 +4,7 @@
     <select id="interviewList">
         select 
             *
-        from bby_preinterview
+        from bby_interview
         <if test=" id != null and id !='' ">
         where no = #{id}
         </if>
