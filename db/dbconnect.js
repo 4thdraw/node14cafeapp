@@ -2,18 +2,14 @@ const express = require('express');
 const mysql = require('mysql'); 
 const bodyParser = require('body-parser'); // node 16버전에서는 express로 편입 호출필요없음
 const router = express.Router();
+const dbconfig = require('./dbconfig');
 
 
 router.use(bodyParser.json());
 
 
-const connectionSetting={
-  host:"nodejs-008.cafe24.com",
-  port:"3306",
-  user:"node14",
-  password:"node0820!!", 
-  database:"node14"  
-}
+const connectionSetting= dbconfig;
+//깃허브에 dbconfig와 node_modules는 빼주기
 
 const conn=mysql.createConnection(connectionSetting)
 
