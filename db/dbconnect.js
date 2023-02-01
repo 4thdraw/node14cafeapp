@@ -1,26 +1,50 @@
 const express = require('express');
-const sql = require('sql'); //sql접속모듈
+const mysql = require('mysql'); 
 const bodyParser = require('body-parser'); // node 16버전에서는 express로 편입 호출필요없음
 const router = express.Router();
 
-//req.body 요청데이터를 json으로 전환실행해라
-router.use(bodyParser.json());
-//node 16버전에서는 bodyParser.json()를 express.json()으로 쓰면됨
 
+router.use(bodyParser.json());
+
+
+const connectionSetting={
+  host:"nodejs-008.cafe24.com",
+  port:"3306",
+  user:"node14",
+  password:"node0820!!", 
+  database:"node14"  
+}
+
+const conn=mysql.createConnection(connectionSetting)
 
 
 router.get('/',(req, res) => {
-    //이전 라우터가 첨부한 내용 확인해보기
-    //확인하기 좋은 앱 Advance REST Client 깔면 좋음(선택)
-    //res의 send를 한눈에 보기좋게 보여줌
-  res.send({ 
-    "sql맵파일" :
-    req.body.mapper,
-    "sql처리":
-    req.body.crud, 
-    "맵아이디":
-    req.body.mapperid
-   })
+   // sql 관리하는 xml파일 접근하기 위한 추가된 정보를 일단 확인해보고 진행
+  // res.send({ 
+  //   "sql맵파일" :
+  //   req.body.mapper,
+  //   "sql처리":
+  //   req.body.crud, 
+  //   "맵아이디":
+  //   req.body.mapperid
+  //  })
+   
+
+  var params = req.body; //요청자료들 일단 여기저장
+   console.log('req.body.body 즉 요청데이터타입 : ', typeof params ); //object
+   console.log('req.body.body 요청데이터  : ', params ); //object
+   //확인해보기
+
+   var noticeQuery = "SELECT * FROM bby_interview";
+      conn.query(noticeQuery, (error, results) => {
+        //DB sql퀴리실행
+        if(error){
+          res.send(error)
+        }
+        res.send('쿼리실행 성공!')
+
+      })
+   
 
 })
 
